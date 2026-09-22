@@ -2,21 +2,13 @@ import React from "react";
 import BookCard from "../shared/BookCard";
 import { IBook } from "@/types/books.type";
 
+import { readFile } from "fs/promises";
+import path from "path";
+
 const getBooks = async () => {
-  try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_SERVER_URL}/booksData.json`,
-    );
-
-    if (!res.ok) {
-      throw new Error("Failed to fetch books");
-    }
-
-    return res.json();
-  } catch (error) {
-    console.error("Error fetching books:", error);
-    throw error;
-  }
+  const filePath = path.join(process.cwd(), "public", "booksData.json");
+  const data = await readFile(filePath, "utf-8");
+  return JSON.parse(data);
 };
 
 const Books = async () => {

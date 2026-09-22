@@ -1,14 +1,24 @@
 "use client";
+
 import SelectedBookCard from "@/components/shared/SelectedBookCard";
 import { BooksContext } from "@/context/BooksContext";
 import { IBook } from "@/types/books.type";
 import React, { useContext, useState } from "react";
 
 const ListedBooks = () => {
-  const { readBooks, wishlist } = useContext(BooksContext);
-  const [sortBy, setSortBy] = useState<"rating" | "pages" | "year">("rating");
+  const context = useContext(BooksContext);
 
-  const sortBooks = (books: IBook[]) => {
+  if (!context) {
+    throw new Error("ListedBooks must be used inside BooksProvider");
+  }
+
+  const { readBooks, wishlist } = context;
+
+  const [sortBy, setSortBy] = useState<"rating" | "pages" | "year">(
+    "rating"
+  );
+
+  const sortBooks = (books: IBook[]): IBook[] => {
     const sortedBooks = [...books];
 
     if (sortBy === "rating") {
@@ -16,20 +26,24 @@ const ListedBooks = () => {
     } else if (sortBy === "pages") {
       sortedBooks.sort((a, b) => b.totalPages - a.totalPages);
     } else if (sortBy === "year") {
-      sortedBooks.sort((a, b) => b.yearOfPublishing - a.yearOfPublishing);
+      sortedBooks.sort(
+        (a, b) => b.yearOfPublishing - a.yearOfPublishing
+      );
     }
+
     return sortedBooks;
   };
 
-  const sortestReadBooks = sortBooks(readBooks);
-  const sortestWishlist = sortBooks(wishlist);
+  const sortedReadBooks = sortBooks(readBooks);
+  const sortedWishlist = sortBooks(wishlist);
 
   return (
-    <div className="container mx-auto py-6 ">
-      <div className="flex text-center flex-col items-center justify-center px-3 py-6 bg-gray-200 gap-4 my-4 rounded-lg">
+    <div className="container mx-auto py-6">
+      <div className="my-4 flex flex-col items-center justify-center gap-4 rounded-lg bg-gray-200 px-3 py-6 text-center">
         <h2 className="font-semibold">Books</h2>
       </div>
-      <div className="flex justify-center text-center mb-4">
+
+      <div className="mb-4 flex justify-center text-center">
         <select
           value={sortBy}
           onChange={(e) =>
@@ -37,46 +51,49 @@ const ListedBooks = () => {
           }
           className="select select-success"
         >
-          <option disabled={true}>Sort By</option>
           <option value="rating">Rating</option>
           <option value="pages">Number of pages</option>
           <option value="year">Publisher year</option>
         </select>
       </div>
-      {/* name of each tab group should be unique */}
+
       <div className="tabs tabs-border">
+        {/* Read Books */}
         <input
           type="radio"
           name="my_tabs_2"
           className="tab"
           aria-label={`Read Books (${readBooks.length})`}
+          defaultChecked
         />
+
         <div className="tab-content border-base-300 bg-base-100 p-10">
-          {readBooks.length > 0 ? (
-            sortestReadBooks.map((book: IBook) => {
-              return <SelectedBookCard key={book.bookId} book={book} />;
-            })
+          {sortedReadBooks.length > 0 ? (
+            sortedReadBooks.map((book) => (
+              <SelectedBookCard key={book.bookId} book={book} />
+            ))
           ) : (
-            <p className="text-gray-500 flex items-center justify-center">
+            <p className="flex items-center justify-center text-gray-500">
               No books in read list.
             </p>
           )}
         </div>
 
+        {/* Wishlist */}
         <input
           type="radio"
           name="my_tabs_2"
           className="tab"
           aria-label={`Wishlist Books (${wishlist.length})`}
-          defaultChecked
         />
+
         <div className="tab-content border-base-300 bg-base-100 p-10">
-          {wishlist.length > 0 ? (
-            sortestWishlist.map((book: IBook) => {
-              return <SelectedBookCard key={book.bookId} book={book} />;
-            })
+          {sortedWishlist.length > 0 ? (
+            sortedWishlist.map((book) => (
+              <SelectedBookCard key={book.bookId} book={book} />
+            ))
           ) : (
-            <p className="text-gray-500 flex items-center justify-center">
+            <p className="flex items-center justify-center text-gray-500">
               No books in wishlist.
             </p>
           )}

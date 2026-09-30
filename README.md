@@ -136,31 +136,6 @@ Book-vibe/
 
 ---
 
-## 🖼️ Screenshots
-
-| Home | Book Details |
-| :---: | :---: |
-| _add screenshot_ | _add screenshot_ |
-
-| Listed Books | Pages to Read |
-| :---: | :---: |
-| _add screenshot_ | _add screenshot_ |
-
-> Save images in a `/screenshots` folder and link them like `![Home](./screenshots/home.png)`.
-
----
-
-## 🗺️ Future Improvements
-
-- [ ] User authentication with cloud-synced reading lists
-- [ ] Search and category filters
-- [ ] Reading progress tracker per book
-- [ ] Dark mode toggle
-- [ ] Book reviews and personal notes
-- [ ] Integration with a public books API
-
----
-
 ## 🤝 Contributing
 
 Contributions, issues, and feature requests are welcome!
